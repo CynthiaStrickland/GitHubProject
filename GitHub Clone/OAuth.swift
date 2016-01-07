@@ -12,6 +12,7 @@ import Security
 let kTokenKey = "kTokenKey"
 let kOAuthBaseURLString = "https://github.com/login/oauth/"
 let kAccessTokenRegexPattern = "access_token=([^&]+)"
+let kOAuthTokenAccess = "https://github.com/login/oauth/access_token"
 
 typealias OAuthCompletion = (success: Bool) -> ()
 
@@ -31,141 +32,60 @@ class OAuth {
     var kClientId = kClientID
     var kClientSecret = kClientSecretID
 
-    static let shared = OAuth()
-
-    func requestGithubAccess(parameters: [String: String]) {
+    class OAuth {
         
-        var requestString = ""
         
-        for (index, value) in parameters {
-            print(index)
-            print(value)
-            requestString = requestString.stringByAppendingString("\(index)=\(value)")
+        func requestGithubAccess(parameters: [String: String]) {
+            
+            var requestString = ""
+            for (index, value) in parameters {
+                requestString = requestString.stringByAppendingString("\(index)=\(value)")
+            }
+            
+            guard let requestURL = NSURL(string: "\(kOAuthBaseURLString)?\(kClientID)&scope=\(requestString)") else {return}
+            UIApplication.sharedApplication().openURL(requestURL)
         }
-
-        guard let requestURL = NSURL(string: "\(kOAuthBaseURLString)?\(kClientId)&scope=\(requestString)") else {return}
-        UIApplication.sharedApplication().openURL(requestURL)
         
-    }
-    
-    func oauthRequestWith(parameters: [String : String]) {
-        var parametersString = String()
-        for parameter in parameters.values {
-            parametersString = parametersString.stringByAppendingString(parameter)
-        }
-    }
-    
-    func exchangeCodeInURL(codeURL : NSURL) {
-        if let code = codeURL.query {
-            let request = NSMutableURLRequest(URL: NSURL(string: "https://github.com/login/oauth/access_token?\(code)&client_id=\(kClientId)&client_secret=\(kClientSecret)")!)
-            request.HTTPMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
-                if let httpResponse = response as? NSHTTPURLResponse {
-                    if httpResponse.statusCode == 200 && data != nil {
+        func exchangeForToken(code: String, completion: (success: Bool) -> ()) {
+            
+            guard let exchangeURL = NSURL(string: "\(kOAuthTokenAccess)?\(kClientID)&\(kClientSecretID)&code=\(code)") else {return}
+            let requestToken = NSMutableURLRequest(URL: exchangeURL)
+            requestToken.HTTPMethod = "POST"
+            requestToken.setValue("application/json", forHTTPHeaderField: "Accept")
+            NSURLSession.sharedSession().dataTaskWithRequest(requestToken) { (data, response, error) -> Void in
+                if let _ = error {
+                    print("this sucks")
+                }
+                if let data = data {
+                    do {
+                        if let rootObject = try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String: AnyObject] {
+                            if let accessToken = rootObject["access_token"] as? String {
+                                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                                    let defaults = NSUserDefaults.standardUserDefaults()
+                                    defaults.setObject(accessToken, forKey: kTokenKey)
+                                    completion(success: defaults.synchronize())
+                                })
+                            }
+                        }
                         
-                        do {
-                            
-                            if let rootObject = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String : AnyObject] {
-                                guard let token = rootObject["access_token"] as? String else {return}
-                                
-                                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                    NSUserDefaults.standardUserDefaults().setObject(token, forKey: kTokenKey)
-                                    NSUserDefaults.standardUserDefaults().synchronize()
-                                })
-                            }
-                            
-                        } catch let error as NSError {
-                            print(error)
-                        }
-                    }
+                    }catch _ {}
                 }
-            }).resume()
-        }
-    }
-    
-    func tokenRequestWithCallback(url: NSURL, options: SaveOptions, completion: OAuthCompletion) {
-        
-        do {
-            let temporaryCode = try self.temporaryCodeFromCallback(url)
-            let requestString = "\(kOAuthBaseURLString)access_token?client_id=\(self.kClientId)&client_secret=\(self.kClientSecret)&code=\(temporaryCode)"
-            
-            if let requestURL = NSURL(string: requestString) {
                 
-                let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-                let session = NSURLSession(configuration: sessionConfiguration)
-                session.dataTaskWithURL(requestURL, completionHandler: { (data, response, error) -> Void in
-                    
-                    if let _ = error {
-                        completion(success: false); return
-                    }
-                    
-                    if let data = data {
-                        if let tokenString = self.stringWith(data) {
-                            
-                            do {
-                                let token = try self.accessTokenFromString(tokenString)!
-                                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                    completion(success: self.saveAccessTokenToUserDefaults(token))
-                                })
-                                
-                            } catch _ {
-                                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                    completion(success: false)
-                                })
-                            }
-                            
-                        }
-                    }
-                }).resume()
-            }
-            
-        } catch _ {
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                completion(success: false)
-            })
-        }
-    }
-    
-    func accessTokenFromString(string: String) throws -> String? {
-        
-        do {
-            let regex = try NSRegularExpression(pattern: kAccessTokenRegexPattern, options: NSRegularExpressionOptions.CaseInsensitive)
-            let matches = regex.matchesInString(string, options: NSMatchingOptions.Anchored, range: NSMakeRange(0, string.characters.count))
-            if matches.count > 0 {
-                for (_, value) in matches.enumerate() {
-                    let matchRange = value.rangeAtIndex(1)
-                    return (string as NSString).substringWithRange(matchRange)
+                if let _ = response {
+                    print(":)")
                 }
-            }
-        } catch _ {
-            throw OAuthError.ExtractingTokenFromString("Could not extract token from string.")
-        }        
-        return nil
-    }
-    
-    func accessToken() -> String? {
-        guard let token = NSUserDefaults.standardUserDefaults().stringForKey(kTokenKey) else {return nil}
-        return token
-    }
-    
-    func temporaryCodeFromCallback(url: NSURL) throws -> String {
-        
-        guard let temporaryCode = url.absoluteString.componentsSeparatedByString("=").last else {
-            throw OAuthError.ExtractingTermporaryCode("Error ExtractingTermporaryCode. See: temporaryCodeFromCallback:")
+                
+                }.resume()
         }
-        return temporaryCode
-    }
-    
-    func stringWith(data: NSData) -> String? {
-        let byteBuffer: UnsafeBufferPointer<UInt8> = UnsafeBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>(data.bytes), count: data.length)
-        return String(bytes: byteBuffer, encoding: NSASCIIStringEncoding)
-    }
-    
-    func saveAccessTokenToUserDefaults(accessToken: String) -> Bool {
-        NSUserDefaults.standardUserDefaults().setObject(accessToken, forKey: kTokenKey)
-        return NSUserDefaults.standardUserDefaults().synchronize()
+        
+        func extractTemporaryCode(url: NSURL) -> String {
+            guard let returnedURL = url.absoluteString.componentsSeparatedByString("=").last else {return "error"}
+            return returnedURL
+            
+        }
+        
+        func accessToken() -> String? {
+            return NSUserDefaults.standardUserDefaults().stringForKey(kTokenKey)
+        }
     }
 }
-
-

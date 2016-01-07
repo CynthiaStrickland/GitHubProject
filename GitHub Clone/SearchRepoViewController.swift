@@ -8,21 +8,18 @@
 
 import UIKit
 
-class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate {
+class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate,, RepositoryWebViewDelegate {
+    
+    class func identifier() -> String {
+        return "SearchForRepos"
+    }
     
     @IBOutlet weak var searchReposBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    
     var array = [Repository]() {
         didSet {
             self.tableView.reloadData()
         }
-    }
-    
-    class func identifier() -> String {
-        return "SearchRepoViewController"
     }
     
     override func viewDidLoad() {
@@ -37,7 +34,7 @@ class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearc
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(SearchRepoViewController.identifier(), forIndexPath: indexPath) as! SearchRepoViewController
+        let cell = tableView.dequeueReusableCellWithIdentifier(SearchTableViewCell.identifier(), forIndexPath: indexPath) as! SearchTableViewCell
         cell.repo = self.array[indexPath.row]
         
         return cell
@@ -49,8 +46,6 @@ class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearc
             GithubService.getReposWithSearch(text, completion: { (array) -> Void in
                 self.array = array
             })
-            
-            
         }
     }
     

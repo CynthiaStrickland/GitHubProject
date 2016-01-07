@@ -10,27 +10,25 @@ import UIKit
 
 class UserCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet var imageView: UIImageView!
+    class func identifier() -> String {
+        return "UserCollectionViewCell"
+    }
     
+    @IBOutlet var imageView: UIImageView!
     var user: User! {
         didSet {
-            
-            NSOperationQueue().addOperationWithBlock { () -> Void in
-                
-                if let imageUrl = NSURL(string: self.user.repoURL!) {
-                    guard let imageData = NSData(contentsOfURL: imageUrl) else {return}
+            if let url = NSURL(string: user.avatar!) {
+                NSOperationQueue().addOperationWithBlock({ () -> Void in
+                    let imageData = NSData(contentsOfURL: url)!
                     let image = UIImage(data: imageData)
+                    
                     NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                         self.imageView.image = image
                     })
-                }
+                })
             }
         }
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.imageView.image = nil
-    }
+
     
 }

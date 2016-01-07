@@ -9,69 +9,57 @@
 import UIKit
 
 @UIApplicationMain
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+    static let shared = OAuth()
+
     var window: UIWindow?
+    var loginViewController: LoginViewController?
     
-    var oauthViewController: LoginViewController?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.checkOAuthStatus()
+        self.presentLoginViewController()
         return true
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        OAuth.shared.tokenRequestWithCallback(url, options: SaveOptions.UserDefaults) { (success) -> () in
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        let code = OAuth.shared.extractTemporaryCode(url)
+        
+        OAuth.shared.exchangeForToken(code) { (success) -> () in
             if success {
-                if let oauthViewController = self.oauthViewController {
-                    oauthViewController.processOauthRequest()
-                }
+                
+                guard let mainViewController = self.loginViewController?.parentViewController as? UserViewController else {return}
+                GithubService.getUser({ (user) -> () in
+                    mainViewController.user = user
+                })
+                
+                UIView.animateWithDuration(0.4, animations: { () -> Void in
+                    
+                    self.loginViewController!.view.alpha = 0.0
+                    }, completion: { (finished) -> Void in
+                        self.loginViewController?.spinner.stopAnimating()
+                        self.loginViewController!.removeFromParentViewController()
+                        self.loginViewController = nil
+                })
             }
         }
         
         return true
     }
     
-    // MARK: Setup
-    
-    func checkOAuthStatus() {
+    func presentLoginViewController() {
         
-        do {
-            
-            let token = try OAuth.shared.accessToken()
+        if let token = OAuth.shared.accessToken() {
             print(token)
+        } else {
+            guard let mainViewController = self.window?.rootViewController as? UITabBarController, storyboard = mainViewController.storyboard else {return}
+            guard let authViewController = storyboard.instantiateViewControllerWithIdentifier(LoginViewController.identifier()) as? LoginViewController else {return}
+            guard let firstTab = mainViewController.viewControllers?.first else {return}
             
-        } catch _ { self.presentOAuthViewController() }
-    }
-    
-    func presentOAuthViewController() {
-        
-        if let tabbarController = self.window?.rootViewController as? UITabBarController, homeViewController = tabbarController.viewControllers?.first as? MyReposViewController, storyboard = tabbarController.storyboard {
+            self.loginViewController = authViewController
             
-            if let oauthViewController = storyboard.instantiateViewControllerWithIdentifier(LoginViewController.identifier()) as? LoginViewController {
-                
-                homeViewController.addChildViewController(oauthViewController)
-                homeViewController.view.addSubview(oauthViewController.view)
-                oauthViewController.didMoveToParentViewController(homeViewController)
-                
-                tabbarController.tabBar.hidden = true
-                
-                oauthViewController.oauthCompletionHandler = ({
-                    UIView.animateWithDuration(0.6, delay: 1.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-                        oauthViewController.view.alpha = 0.0
-                        }, completion: { (finished) -> Void in
-                            oauthViewController.view.removeFromSuperview()
-                            oauthViewController.removeFromParentViewController()
-                            
-                            tabbarController.tabBar.hidden = false
-                            
-                            homeViewController.update()
-                    })
-                })
-                
-                self.oauthViewController = oauthViewController
-            }
+            firstTab.addChildViewController(authViewController)
+            firstTab.view.addSubview(authViewController.view)
+            authViewController.didMoveToParentViewController(firstTab)
         }
     }
 }

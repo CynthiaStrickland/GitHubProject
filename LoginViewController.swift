@@ -22,7 +22,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginButtonPressed(sender: UIButton) {
         self.activityController.startAnimating()
-                OAuth.shared.requestGithubAccess(["scope" : "user,repo"])
+        OAuth.shared.requestGithubAccess(["scope" : "user,repo"])
     }
 
     var oauthCompletionHandler: OAuthViewControllerCompletionHandler?
