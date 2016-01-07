@@ -9,8 +9,8 @@
 import UIKit
 
 let kTokenKey = "kTokenKey"
-let kClientId = "client_id=d325e72fb3250a427806"
-let kClientSecret = "client_secret=98c8c84c3c978c39977a5fc877e5ff0a2365de16"
+let kClientId = kClientID
+let kClientSecretId = kClientSecretID
 let kOAuthAuthorize = "https://github.com/login/oauth/authorize"
 let kOAuthTokenAccess = "https://github.com/login/oauth/access_token"
 
@@ -39,7 +39,7 @@ class OAuthClient {
     func exchangeForToken(code: String, completion: (success: Bool) -> ()) {
         print(code)
         
-        guard let exchangeURL = NSURL(string: "\(kOAuthTokenAccess)?\(kClientId)&\(kClientSecret)&code=\(code)") else {return}
+        guard let exchangeURL = NSURL(string: "\(kOAuthTokenAccess)?\(kClientId)&\(kClientSecretId)&code=\(code)") else {return}
         let requestToken = NSMutableURLRequest(URL: exchangeURL)
         requestToken.HTTPMethod = "POST"
         requestToken.setValue("application/json", forHTTPHeaderField: "Accept")
