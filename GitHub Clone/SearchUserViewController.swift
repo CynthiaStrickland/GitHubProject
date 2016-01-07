@@ -57,7 +57,7 @@ class SearchUserViewController: UIViewController, UICollectionViewDelegate, UICo
                                 let profileImageUrl = item["avatar_url"] as? String
     
                                 if let name = name, profileImageUrl = profileImageUrl {
-                                    users.append(User(name: name, profileImageUrl: profileImageUrl, id: id))
+                                    users.append(User(name: name, repoURL: nil, id: nil, login: nil, avatar: nil))
                                 }
                                 
                             }
