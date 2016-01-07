@@ -34,7 +34,7 @@ class SearchUserViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func update(searchTerm: String) {
         do {
-            let token = OAuth.shared.accessToken()
+            let token = OAuthClient.shared.accessToken()
             
             let url = NSURL(string: "https://api.github.com/search/users?access_token=\(token)&q=\(searchTerm)")!
             

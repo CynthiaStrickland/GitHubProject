@@ -6,6 +6,10 @@
 //  Copyright © 2016 Cynthia Whitlatch. All rights reserved.
 //
 
+
+import UIKit
+
+
 class CustomRepoCell: UITableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -31,10 +35,4 @@ class CustomRepoCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 }
-
-
-
-
-
-
 

@@ -1,5 +1,5 @@
 //
-//  WebViewController.swift
+//  UserProfileViewController.swift
 //  GitHubClone
 //
 //  Created by Cynthia Whitlatch on 1/6/16.
@@ -9,10 +9,10 @@
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController {
+class UserProfileViewController: UIViewController {
     
     class func identifier() -> String {
-        return "WebViewController"
+        return "UserProfileViewController"
     }
 
     @IBOutlet weak var userName: UILabel!

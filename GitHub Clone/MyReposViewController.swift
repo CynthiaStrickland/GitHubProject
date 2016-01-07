@@ -29,7 +29,7 @@ class MyReposViewController: UIViewController, UITableViewDataSource {
     
     func update() {
         do {
-            let token = try OAuth.shared.accessToken()
+            let token = try OAuthClient.shared.accessToken()
             let url = NSURL(string: "https://api.github.com/user/repos?access_token=\(token)")!
             let request = NSMutableURLRequest(URL: url)
             request.setValue("application/json", forHTTPHeaderField: "Accept")

@@ -22,12 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        let code = OAuth.shared.extractTemporaryCode(url)
+        let code = OAuthClient.shared.extractTemporaryCode(url)
         
-        OAuth.shared.exchangeForToken(code) { (success) -> () in
+        OAuthClient.shared.exchangeForToken(code) { (success) -> () in
             if success {
                 
-                guard let mainViewController = self.loginViewController?.parentViewController as? UserViewController else {return}
+                guard let mainViewController = self.loginViewController?.parentViewController as? UserProfileViewController else {return}
                 GithubService.getUser({ (user) -> () in
                     mainViewController.user = user
                 })
@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     self.loginViewController!.view.alpha = 0.0
                     }, completion: { (finished) -> Void in
-                        self.oginViewController?.spinner.stopAnimating()
+                        self.loginViewController?.spinner.stopAnimating()
                         self.loginViewController!.removeFromParentViewController()
                         self.loginViewController = nil
                 })
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func presentLoginViewController() {
         
-        if let token = OAuth.shared.accessToken() {
+        if let token = OAuthClient.shared.accessToken() {
             print(token)
         } else {
             guard let mainViewController = self.window?.rootViewController as? UITabBarController, storyboard = mainViewController.storyboard else {return}

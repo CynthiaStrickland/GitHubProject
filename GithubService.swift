@@ -11,7 +11,7 @@ import UIKit
 class GithubService {
     
     class func getReposWithSearch(text: String, completion: (repositoryArray: [Repository]) -> Void) {
-        if let token = OAuth.shared.accessToken() {
+        if let token = OAuthClient.shared.accessToken() {
             guard let baseURL = NSURL(string: "https://api.github.com/search/repositories?q=\(text)") else {return}
             print(baseURL)
             let request = NSMutableURLRequest(URL: baseURL)
@@ -41,7 +41,7 @@ class GithubService {
     
     class func getUser(completion: (user: User) -> ())  {
         
-        if let token = OAuth.shared.accessToken() {
+        if let token = OAuthClient.shared.accessToken() {
             print(token)
             guard let baseURL = NSURL(string: "https://api.github.com/user") else {return}
             let request = NSMutableURLRequest(URL: baseURL)
@@ -75,7 +75,7 @@ class GithubService {
     class func postRepo(name: String) {
         do {
             
-            if let token = OAuth.shared.accessToken() {
+            if let token = OAuthClient.shared.accessToken() {
                 guard let baseURL = NSURL(string: "https://api.github.com/user/repos") else {return}
                 print(baseURL)
                 let request = NSMutableURLRequest(URL: baseURL)
@@ -145,7 +145,7 @@ class GithubService {
     
     class func getUserWithSearch(name: String, completion: (userArray: [User]) -> ())  {
         
-        if let token = OAuth.shared.accessToken() {
+        if let token = OAuthClient.shared.accessToken() {
             print(token)
             guard let baseURL = NSURL(string: "https://api.github.com/search/users?q=\(name)") else {return}
             let request = NSMutableURLRequest(URL: baseURL)
