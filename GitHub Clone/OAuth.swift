@@ -9,6 +9,7 @@
 import UIKit
 import Security
 
+
 let kTokenKey = "kTokenKey"
 //let kAccessTokenKey = "kAccessTokenKey"
 let kOAuthBaseURLString = "https://github.com/login/oauth/"
@@ -30,8 +31,8 @@ enum SaveOptions: Int {
 
 class OAuth {
 
-    var kClientId = "6dbbdb4f04a1cf3f344e"
-    let kClientSecret = "c3f97b9e1de39340f3d76e9bc4a8f02b155fc881"
+    var kClientId = kClientID
+    var kClientSecret = kClientSecretID
 
     static let shared = OAuth()
     

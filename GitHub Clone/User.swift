@@ -11,10 +11,12 @@ class User {
     
     var name: String
     var profileImageUrl: String
+    let login : String
     
-    init(name: String, profileImageUrl: String) {
+    init(name: String, profileImageUrl: String, login: String) {
         self.name = name
         self.profileImageUrl = profileImageUrl
+        self.login = login
     }
     
 }

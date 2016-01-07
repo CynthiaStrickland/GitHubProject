@@ -36,11 +36,7 @@ class LoginViewController: UIViewController {
             super.viewDidLoad()
             self.setupAppearance()
         }
-        
-        override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-        }
-        
+    
         func setupAppearance() {
             self.loginButton.layer.cornerRadius = 3.0
         }

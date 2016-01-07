@@ -21,19 +21,3 @@ class Repository {
     }
 }
 
-
-
-//        "id": 1296269,
-//        "owner": {
-//            "login": "octocat",
-//            "id": 1,
-//            ...
-//        },
-//        "name": "Hello-World",
-//        "full_name": "octocat/Hello-World",
-//        "description": "This your first repo!",
-//        "private": false,
-//        "fork": false,
-//        "url": "https://api.github.com/repos/octocat/Hello-World",
-//        "html_url": "https://github.com/octocat/Hello-World"
-

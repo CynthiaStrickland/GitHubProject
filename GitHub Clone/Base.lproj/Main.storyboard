@@ -123,6 +123,9 @@
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Ys8-0M-Vxm">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ito-k9-1hg" id="glj-aT-3YY"/>
+                                </connections>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fCE-lh-OH2">
                                 <rect key="frame" x="0.0" y="72" width="375" height="546"/>
@@ -133,16 +136,34 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="collectionviewcell" id="r5A-NE-dg3">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="collectionviewcell" id="r5A-NE-dg3" customClass="UserCollectionViewCell" customModule="GitHubClone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HXC-W8-Ggs">
+                                                    <rect key="frame" x="8" y="14" width="124" height="128"/>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="HXC-W8-Ggs" firstAttribute="top" secondItem="r5A-NE-dg3" secondAttribute="topMargin" constant="6" id="CcM-h1-gBk"/>
+                                            <constraint firstAttribute="trailing" secondItem="HXC-W8-Ggs" secondAttribute="trailing" id="V7P-Xe-nTi"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="HXC-W8-Ggs" secondAttribute="bottom" constant="-18" id="nxt-Qc-IHt"/>
+                                            <constraint firstItem="HXC-W8-Ggs" firstAttribute="leading" secondItem="r5A-NE-dg3" secondAttribute="leadingMargin" id="se6-Mn-gB3"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="HXC-W8-Ggs" id="ZJi-EY-1EE"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="ito-k9-1hg" id="mVU-MR-LgV"/>
+                                    <outlet property="delegate" destination="ito-k9-1hg" id="2u5-Ea-Vkn"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -158,6 +179,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Search User" id="BsT-3F-FvH"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="collectionView" destination="fCE-lh-OH2" id="iDl-cr-0Wf"/>
+                        <outlet property="searchBar" destination="Ys8-0M-Vxm" id="EBe-kM-c5L"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAd-yS-ZUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -256,6 +281,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KHB-Qc-dRE" id="CLx-Fo-2Jh"/>
+                                    <outlet property="delegate" destination="KHB-Qc-dRE" id="wPm-BN-fTO"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -317,6 +346,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="itX-BM-lVz" id="KnC-3U-40O"/>
+                                    <outlet property="delegate" destination="itX-BM-lVz" id="PLU-ig-5MS"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -333,6 +366,10 @@
                     <tabBarItem key="tabBarItem" title="Search Repo" id="8sr-wN-42H"/>
                     <navigationItem key="navigationItem" id="YWn-ll-sQr"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="searchBar" destination="q1X-OE-xdz" id="lHM-y9-Yg3"/>
+                        <outlet property="tableView" destination="gVV-oa-dAd" id="6Io-o8-T4m"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAq-vV-sDx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
