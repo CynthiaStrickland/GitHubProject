@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate,, RepositoryWebViewDelegate {
+class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate, RepositoryWebViewDelegate {
     
     class func identifier() -> String {
         return "SearchForRepos"

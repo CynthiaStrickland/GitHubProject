@@ -17,35 +17,37 @@ class WebViewController: UIViewController {
 
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userImage: UIImageView!
-    @IBOutlet weak var item: UILabel!
+    @IBOutlet weak var login: UILabel!
     
-    var user: User? {
-        didSet {
-            self.userName.text = user?.name
-            self.item.text = user?.login
-            
-            if let url = NSURL(string: user!.avatar!) {
-                NSOperationQueue().addOperationWithBlock({ () -> Void in
-                    let imageData = NSData(contentsOfURL: url)!
-                    let image = UIImage(data: imageData)
-                    
-                    NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                        self.userImage.image = image
+        var user: User? {
+            didSet {
+                self.userName.text = user?.name
+                self.login.text = user?.login
+                
+                if let url = NSURL(string: user!.avatar!) {
+                    NSOperationQueue().addOperationWithBlock({ () -> Void in
+                        let imageData = NSData(contentsOfURL: url)!
+                        let image = UIImage(data: imageData)
+                        
+                        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                            self.userImage.image = image
                     })
                 })
             }
         }
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.getUser()
-    }
     
-    func getUser() {
-        GithubService.getUser { (user) -> () in
-            self.user = user
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            self.getUser()
         }
-    }    
+        
+        func getUser() {
+            GithubService.getUser { (user) -> () in
+                self.user = user
+            }
+        }
+        
 }
 
     

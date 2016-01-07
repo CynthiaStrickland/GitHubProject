@@ -6,12 +6,12 @@
 //  Copyright © 2015 Michael Babiy. All rights reserved.
 //
 
+
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    static let shared = OAuth()
-
+    
     var window: UIWindow?
     var loginViewController: LoginViewController?
     
@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     self.loginViewController!.view.alpha = 0.0
                     }, completion: { (finished) -> Void in
-                        self.loginViewController?.spinner.stopAnimating()
+                        self.oginViewController?.spinner.stopAnimating()
                         self.loginViewController!.removeFromParentViewController()
                         self.loginViewController = nil
                 })

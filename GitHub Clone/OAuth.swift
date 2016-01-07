@@ -10,6 +10,7 @@ import UIKit
 import Security
 
 let kTokenKey = "kTokenKey"
+let kOAuthAuthorize = "https://github.com/login/oauth/authorize"
 let kOAuthBaseURLString = "https://github.com/login/oauth/"
 let kAccessTokenRegexPattern = "access_token=([^&]+)"
 let kOAuthTokenAccess = "https://github.com/login/oauth/access_token"
@@ -31,30 +32,37 @@ class OAuth {
 
     var kClientId = kClientID
     var kClientSecret = kClientSecretID
-
-    class OAuth {
         
+        static let shared = OAuth()
         
         func requestGithubAccess(parameters: [String: String]) {
             
             var requestString = ""
+            print(parameters)
+            
             for (index, value) in parameters {
+                print(index)
+                print(value)
                 requestString = requestString.stringByAppendingString("\(index)=\(value)")
             }
             
-            guard let requestURL = NSURL(string: "\(kOAuthBaseURLString)?\(kClientID)&scope=\(requestString)") else {return}
+            print(requestString)
+            
+            guard let requestURL = NSURL(string: "\(kOAuthAuthorize)?\(kClientId)&scope=\(requestString)") else {return}
             UIApplication.sharedApplication().openURL(requestURL)
+            
         }
         
         func exchangeForToken(code: String, completion: (success: Bool) -> ()) {
+            print(code)
             
-            guard let exchangeURL = NSURL(string: "\(kOAuthTokenAccess)?\(kClientID)&\(kClientSecretID)&code=\(code)") else {return}
+            guard let exchangeURL = NSURL(string: "\(kOAuthTokenAccess)?\(kClientId)&\(kClientSecret)&code=\(code)") else {return}
             let requestToken = NSMutableURLRequest(URL: exchangeURL)
             requestToken.HTTPMethod = "POST"
             requestToken.setValue("application/json", forHTTPHeaderField: "Accept")
             NSURLSession.sharedSession().dataTaskWithRequest(requestToken) { (data, response, error) -> Void in
                 if let _ = error {
-                    print("this sucks")
+                    print("error")
                 }
                 if let data = data {
                     do {
@@ -68,14 +76,12 @@ class OAuth {
                             }
                         }
                         
-                    }catch _ {}
+                    } catch _ {}
                 }
                 
                 if let _ = response {
                     print(":)")
                 }
-                
-                }.resume()
         }
         
         func extractTemporaryCode(url: NSURL) -> String {
@@ -88,4 +94,6 @@ class OAuth {
             return NSUserDefaults.standardUserDefaults().stringForKey(kTokenKey)
         }
     }
+        
 }
+
