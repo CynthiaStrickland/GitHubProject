@@ -42,7 +42,7 @@
         <!--Login View Controller-->
         <scene sceneID="GLJ-66-uHH">
             <objects>
-                <viewController id="E5M-UD-n6f" customClass="LoginViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="E5M-UD-n6f" customClass="LoginViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BQ1-ck-X3b"/>
                         <viewControllerLayoutGuide type="bottom" id="pSL-ZE-5xD"/>
@@ -61,7 +61,7 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginButtonPressed:" destination="E5M-UD-n6f" eventType="touchUpInside" id="B3I-7c-Btc"/>
+                                    <action selector="loginButtonPressed:" destination="E5M-UD-n6f" eventType="touchUpInside" id="BYo-8g-uyl"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search.png" translatesAutoresizingMaskIntoConstraints="NO" id="ye8-Jn-Ynm">
@@ -84,8 +84,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="loginButton" destination="NCy-k0-ZF9" id="oyn-Jo-Mob"/>
-                        <outlet property="spinner" destination="DL2-c7-qz7" id="Yef-PN-wzC"/>
+                        <outlet property="spinner" destination="DL2-c7-qz7" id="xV7-ov-qEU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pml-OA-awX" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var loginViewController: LoginViewController?
     
-    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.presentLoginViewController()
         return true
@@ -26,14 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         OAuthClient.shared.exchangeForToken(code) { (success) -> () in
             if success {
-                
                 guard let mainViewController = self.loginViewController?.parentViewController as? UserProfileViewController else {return}
                 GithubService.getUser({ (user) -> () in
                     mainViewController.user = user
                 })
                 
                 UIView.animateWithDuration(0.4, animations: { () -> Void in
-                    
                     self.loginViewController!.view.alpha = 0.0
                     }, completion: { (finished) -> Void in
                         self.loginViewController?.spinner.stopAnimating()
@@ -42,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
         }
-        
         return true
     }
     
