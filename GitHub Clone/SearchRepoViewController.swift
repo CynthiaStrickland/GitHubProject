@@ -7,17 +7,17 @@
 //
 
 import UIKit
-import SafariServices
 
-class SearchRepoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, SFSafariViewControllerDelegate {
+class SearchRepoViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate {
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchReposBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    var repositories = [Repository]() {
+    
+    
+    var array = [Repository]() {
         didSet {
-            self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
-            
+            self.tableView.reloadData()
         }
     }
     
@@ -27,109 +27,45 @@ class SearchRepoViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.searchReposBar.delegate = self
+        self.tableView.dataSource = self
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    func update(searchTerm: String) {
-        
-        do {
-            let token = try OAuth.shared.accessToken()
-            
-            let url = NSURL(string: "https://api.github.com/search/repositories?access_token=\(token)&q=\(searchTerm)")!
-            
-            let request = NSMutableURLRequest(URL: url)
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            
-            NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
-                
-                if let error = error {
-                    print(error)
-                }
-                
-                if let data = data {
-                    if let dictionaryOfRepositories = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [String : AnyObject] {
-                        
-                        if let items = dictionaryOfRepositories["items"] as? [[String : AnyObject]] {
-                            
-                            
-                            var repositories = [Repository]()
-                            
-                            for eachRepository in items {
-                                let name = eachRepository["name"] as? String
-                                let id = eachRepository["id"] as? Int
-                                let repositoryUrl = eachRepository["svn_url"] as? String
-                                
-                                if let name = name, id = id, repositoryUrl = repositoryUrl {
-                                    let repo = Repository(name: name, id: id, url: repositoryUrl)
-                                    repositories.append(repo)
-                                }
-                            }
-                            
-                            // This is because NSURLSession comes back on a background q.
-                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                self.repositories = repositories
-                            })
-                        }
-                    }
-                }
-                }.resume()
-        } catch {}
-    }
-    
-    // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.repositories.count
+        return self.array.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("repoCell", forIndexPath: indexPath)
-        let repository = self.repositories[indexPath.row]
-        cell.textLabel?.text = repository.name
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(SearchRepoViewController.identifier(), forIndexPath: indexPath) as! SearchRepoViewController
+        cell.repo = self.array[indexPath.row]
+        
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let selectedRepositoryUrl = repositories[indexPath.row].url
-        print("The selected repo url for safari is: \(selectedRepositoryUrl)")
-        
-        let safariViewController = SFSafariViewController(URL: NSURL(string: selectedRepositoryUrl)!, entersReaderIfAvailable: true)
-        safariViewController.delegate = self
-        self.presentViewController(safariViewController, animated: true, completion: nil)
-    }
-    
-    // MARK: UISearchBarDelegate
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        if let searchTerm = searchBar.text {
-            if String.validateInput(searchTerm) {
-                self.update(searchTerm)
-            } else {
-                let alert = UIAlertController(title: "No Bueno", message: "Your search for '\(searchBar.text!)' is no bueno.", preferredStyle: .Alert)
-                let action = UIAlertAction(title: "lol", style: .Cancel, handler: nil)
-                alert.addAction(action)
-                presentViewController(alert, animated: true, completion: nil)
-            }
+        self.array = []
+        if let text = searchReposBar.text{
+            GithubService.getReposWithSearch(text, completion: { (array) -> Void in
+                self.array = array
+            })
+            
+            
         }
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-        self.searchBar.resignFirstResponder()
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == RepositoryWebView.identifier() {
+            guard let repoWebViewController = segue.destinationViewController as? RepositoryWebView else {return}
+            guard let myIndexPath = self.tableView.indexPathForSelectedRow else {return}
+            let repo = self.array[myIndexPath.row]
+            repoWebViewController.repo = repo
+            repoWebViewController.delegate = self
+        }
     }
     
-    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
-        self.searchBar.resignFirstResponder()
-        return true
-    }
-    
-    
-    // MARK: SFSafariViewControllerDelegate
-    
-    func safariViewControllerDidFinish(controller: SFSafariViewController) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
+    func repositoryWebViewDidFinish() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

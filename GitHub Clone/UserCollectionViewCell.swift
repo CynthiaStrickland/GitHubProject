@@ -17,7 +17,7 @@ class UserCollectionViewCell: UICollectionViewCell {
             
             NSOperationQueue().addOperationWithBlock { () -> Void in
                 
-                if let imageUrl = NSURL(string: self.user.profileImageUrl) {
+                if let imageUrl = NSURL(string: self.user.repoURL!) {
                     guard let imageData = NSData(contentsOfURL: imageUrl) else {return}
                     let image = UIImage(data: imageData)
                     NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
@@ -25,7 +25,6 @@ class UserCollectionViewCell: UICollectionViewCell {
                     })
                 }
             }
-            
         }
     }
     

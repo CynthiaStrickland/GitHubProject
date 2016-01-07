@@ -34,13 +34,12 @@ class SearchUserViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func update(searchTerm: String) {
         do {
-            let token = try OAuth.shared.accessToken()
+            let token = OAuth.shared.accessToken()
             
             let url = NSURL(string: "https://api.github.com/search/users?access_token=\(token)&q=\(searchTerm)")!
             
             let request = NSMutableURLRequest(URL: url)
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            
+            request.setValue("application/json", forHTTPHeaderField: "Accept")            
             NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
                 
                 if let error = error {
@@ -52,21 +51,13 @@ class SearchUserViewController: UIViewController, UICollectionViewDelegate, UICo
                     if let json = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [String : AnyObject] {
                         
                         if let items = json["items"] as? [[String : AnyObject]] {
-                            
-                            // login
-                            // avatar_url
-                            
                             var users = [User]()
-                            
                             for item in items {
-                                
-                                let name = item["login"] as? String
+                            let name = item["login"] as? String
                                 let profileImageUrl = item["avatar_url"] as? String
-                                
+    
                                 if let name = name, profileImageUrl = profileImageUrl {
-                                    
-                                    users.append(User(name: name, profileImageUrl: profileImageUrl))
-                                    
+                                    users.append(User(name: name, profileImageUrl: profileImageUrl, id: id))
                                 }
                                 
                             }
@@ -74,11 +65,8 @@ class SearchUserViewController: UIViewController, UICollectionViewDelegate, UICo
                             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                                 self.users = users
                             })
-                            
                         }
-                        
                     }
-                    
                 }
                 
                 }.resume()

@@ -10,14 +10,16 @@ import Foundation
 
 class Repository {
     
-    let name: String
-    let id: Int
-    let url: String
+    var owner: Owner?
+    var name: String?
+    var description: String?
+    var repoURL: String!
     
-    init(name: String, id: Int, url: String) {
+    init(owner: Owner?, name: String, description: String?, repoURL: String!) {
+        self.owner = owner
         self.name = name
-        self.id = id
-        self.url = url
+        self.description = description
+        self.repoURL = repoURL
     }
 }
 

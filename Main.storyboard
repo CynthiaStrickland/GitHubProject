@@ -1,59 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="eM8-qE-DzU">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Web View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="WebViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qsX-ty-5cj">
-                                <rect key="frame" x="201" y="168" width="199" height="59"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="59" id="hY3-4G-ILD"/>
-                                    <constraint firstAttribute="width" constant="199" id="qaB-by-K9s"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="30"/>
-                                <state key="normal" title="Request Token">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="requestTokenButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KE9-mq-20a"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fI-cC-clA">
-                                <rect key="frame" x="201" y="385" width="199" height="59"/>
-                                <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="30"/>
-                                <state key="normal" title="Print Token">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="printTokenButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Syb-Ql-263"/>
-                                </connections>
-                            </button>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7zr-2K-YPd">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="qsX-ty-5cj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="1Mn-7J-7F6"/>
-                            <constraint firstItem="qsX-ty-5cj" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-102.5" id="9n3-qU-PIK"/>
-                            <constraint firstItem="4fI-cC-clA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sUQ-A6-by5"/>
+                            <constraint firstAttribute="trailing" secondItem="7zr-2K-YPd" secondAttribute="trailing" id="6bo-BI-5kU"/>
+                            <constraint firstItem="7zr-2K-YPd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="TmP-jY-gD1"/>
+                            <constraint firstItem="7zr-2K-YPd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="X3j-vu-HWn"/>
+                            <constraint firstItem="7zr-2K-YPd" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="lK9-H7-g8v"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="497" y="-48"/>
+            <point key="canvasLocation" x="2412.5" y="302.5"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="GLJ-66-uHH">
@@ -188,10 +169,10 @@
             </objects>
             <point key="canvasLocation" x="1048.5" y="1120.5"/>
         </scene>
-        <!--Web View Controller-->
+        <!--User Profile-->
         <scene sceneID="CY0-Zz-m6X">
             <objects>
-                <viewController id="rYZ-Lq-svU" customClass="WebViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" id="rYZ-Lq-svU" customClass="WebViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pLA-Z7-trN"/>
                         <viewControllerLayoutGuide type="bottom" id="tMt-w7-c9s"/>
@@ -218,6 +199,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="User Profile" id="Gkz-mb-Gjl"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="item" destination="Ca0-5b-qgP" id="E9P-BK-Ne7"/>
@@ -227,7 +209,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jnL-8T-545" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1974.5" y="302.5"/>
+            <point key="canvasLocation" x="561.5" y="1120.5"/>
         </scene>
         <!--Home-->
         <scene sceneID="oMX-cs-Qhr">
@@ -305,7 +287,7 @@
             </objects>
             <point key="canvasLocation" x="1974.5" y="-493.5"/>
         </scene>
-        <!--Search Repo-->
+        <!--Search Repo View Controller-->
         <scene sceneID="H7Y-qn-zJN">
             <objects>
                 <viewController id="itX-BM-lVz" customClass="SearchRepoViewController" customModule="GitHubClone" customModuleProvider="target" sceneMemberID="viewController">
@@ -318,11 +300,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="q1X-OE-xdz">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gVV-oa-dAd">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <rect key="frame" x="0.0" y="152" width="375" height="466"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="searchrepoviewcontroller" textLabel="bi0-A3-l7h" style="IBUITableViewCellStyleDefault" id="Aqv-hd-G2U">
@@ -342,7 +324,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="rYZ-Lq-svU" kind="show" id="rpM-1h-Nvb"/>
+                                            <segue destination="BYZ-38-t0r" kind="presentation" id="ytC-y6-Q4R"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -363,17 +345,16 @@
                             <constraint firstAttribute="trailing" secondItem="gVV-oa-dAd" secondAttribute="trailing" id="rbd-4T-0mX"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Search Repo" id="8sr-wN-42H"/>
                     <navigationItem key="navigationItem" id="YWn-ll-sQr"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="searchBar" destination="q1X-OE-xdz" id="lHM-y9-Yg3"/>
-                        <outlet property="tableView" destination="gVV-oa-dAd" id="6Io-o8-T4m"/>
+                        <outlet property="searchReposBar" destination="q1X-OE-xdz" id="0j9-BA-JDy"/>
+                        <outlet property="tableView" destination="gVV-oa-dAd" id="pMr-Hc-hmi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IAq-vV-sDx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1514.5" y="302.5"/>
+            <point key="canvasLocation" x="1974.5" y="302.5"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="PUi-px-7Go">
@@ -386,14 +367,34 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="itX-BM-lVz" kind="relationship" relationship="viewControllers" id="Tpy-o5-qex"/>
+                        <segue destination="dCw-Cp-RhE" kind="relationship" relationship="viewControllers" id="Tpy-o5-qex"/>
                         <segue destination="ito-k9-1hg" kind="relationship" relationship="viewControllers" id="lCP-jn-iSR"/>
                         <segue destination="Hsa-8D-Wav" kind="relationship" relationship="viewControllers" id="R3J-fx-W6m"/>
+                        <segue destination="rYZ-Lq-svU" kind="relationship" relationship="viewControllers" id="Df9-Mk-Zq5"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BY7-Jz-KKr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1049" y="303"/>
+        </scene>
+        <!--Search Repo-->
+        <scene sceneID="1bb-xr-qX9">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dCw-Cp-RhE" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search Repo" id="8sr-wN-42H"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CfH-dk-OjG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="itX-BM-lVz" kind="relationship" relationship="rootViewController" id="9nC-33-Xlg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ho4-qY-yHm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1514.5" y="302.5"/>
         </scene>
     </scenes>
     <resources>

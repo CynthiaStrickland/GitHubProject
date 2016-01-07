@@ -9,12 +9,9 @@
 import UIKit
 import Security
 
-
 let kTokenKey = "kTokenKey"
-//let kAccessTokenKey = "kAccessTokenKey"
 let kOAuthBaseURLString = "https://github.com/login/oauth/"
 let kAccessTokenRegexPattern = "access_token=([^&]+)"
-
 
 typealias OAuthCompletion = (success: Bool) -> ()
 
@@ -35,10 +32,20 @@ class OAuth {
     var kClientSecret = kClientSecretID
 
     static let shared = OAuth()
-    
-    func requestGithubAccess() {
-        let authURL = NSURL(string: "https://github.com/login/oauth/authorize?client_id=\(kClientId)&scope=user,repo")
-        UIApplication.sharedApplication().openURL(authURL!)
+
+    func requestGithubAccess(parameters: [String: String]) {
+        
+        var requestString = ""
+        
+        for (index, value) in parameters {
+            print(index)
+            print(value)
+            requestString = requestString.stringByAppendingString("\(index)=\(value)")
+        }
+
+        guard let requestURL = NSURL(string: "\(kOAuthBaseURLString)?\(kClientId)&scope=\(requestString)") else {return}
+        UIApplication.sharedApplication().openURL(requestURL)
+        
     }
     
     func oauthRequestWith(parameters: [String : String]) {
@@ -133,22 +140,20 @@ class OAuth {
             }
         } catch _ {
             throw OAuthError.ExtractingTokenFromString("Could not extract token from string.")
-        }
-        
+        }        
         return nil
     }
     
     func accessToken() -> String? {
         guard let token = NSUserDefaults.standardUserDefaults().stringForKey(kTokenKey) else {return nil}
-        
         return token
     }
+    
     func temporaryCodeFromCallback(url: NSURL) throws -> String {
         
         guard let temporaryCode = url.absoluteString.componentsSeparatedByString("=").last else {
             throw OAuthError.ExtractingTermporaryCode("Error ExtractingTermporaryCode. See: temporaryCodeFromCallback:")
         }
-        
         return temporaryCode
     }
     
